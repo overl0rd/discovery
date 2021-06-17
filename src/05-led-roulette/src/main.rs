@@ -3,22 +3,19 @@
 #![no_std]
 
 use aux5::{entry, Delay, DelayMs, LedArray, OutputSwitch};
-use volatile::Volatile;
 
 #[entry]
 fn main() -> ! {
     let (mut delay, mut leds): (Delay, LedArray) = aux5::init();
 
-    let mut half_period = 500_u16;
-    let v_half_period = Volatile::new(&mut half_period);
-
     loop {
         for led in 0..8 {
-            leds[led].on().ok();
-            delay.delay_ms(v_half_period.read());
+            let next = (led + 1) % 8;
 
+            leds[next].on().ok();
+            delay.delay_ms(50_u16);
             leds[led].off().ok();
-            delay.delay_ms(v_half_period.read());
+            delay.delay_ms(150_u16);
         }
     }
 }
