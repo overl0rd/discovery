@@ -13,10 +13,12 @@ fn main() -> ! {
     let v_half_period = Volatile::new(&mut half_period);
 
     loop {
-        leds[0].on().ok();
-        delay.delay_ms(v_half_period.read());
+        for led in 0..8 {
+            leds[led].on().ok();
+            delay.delay_ms(v_half_period.read());
 
-        leds[0].off().ok();
-        delay.delay_ms(v_half_period.read());
+            leds[led].off().ok();
+            delay.delay_ms(v_half_period.read());
+        }
     }
 }
