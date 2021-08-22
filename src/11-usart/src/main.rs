@@ -8,11 +8,12 @@ use aux11::{entry, iprint, iprintln};
 
 #[entry]
 fn main() -> ! {
-    let (usart1, mono_timer, mut itm) = aux11::init();
-
-    let instant = mono_timer.now();
+    let (usart1, _mono_timer, _itm) = aux11::init();
 
     // Send a single character
+    usart1
+        .tdr
+        .write(|w| w.tdr().bits(u16::from(b'X')) );
 
     for c in "The quick brown fox jumps over the lazy dog.".chars() {
         while usart1.isr.read().txe().bit_is_clear() {}
