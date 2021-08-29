@@ -14,8 +14,8 @@ fn main() -> ! {
         while usart1.isr.read().rxne().bit_is_clear() {}
 
         // Retrieve the data
-        let _byte = usart1.rdr.read().rdr().bits() as u8;
+        let echo_byte = usart1.rdr.read().rdr().bits() as u8;
 
-        aux11::bkpt();
+        usart1.tdr.write(|w| w.tdr().bits(u16::from(echo_byte)));
     }
 }
